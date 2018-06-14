@@ -1,0 +1,141 @@
+﻿@model Ch24ShoppingCartMVC.Models.CartViewModel
+
+@{
+    ViewBag.Title = "Checkout";
+}
+@section css {
+
+}
+@if (ViewBag.Message != null)
+{
+    
+    <script>
+
+$(document).ready(function(){
+
+alert('@ViewBag.Message');
+
+});
+
+    </script>
+
+}
+<br />
+
+<h2>Checkout Details</h2>
+<br />
+@if (Model.Cart.Count < 1)
+{
+    <p>Nothing to checkout! :( </p>
+}
+else
+{
+
+    using (Html.BeginForm("Submit", "Checkout", FormMethod.Post))
+    {
+        <fieldset>
+            <legend>Shipping Address</legend>
+            <p>Name: </p> <input type="text" name="Name" />
+            <p>Address: </p> <input type="text" name="Address" />
+            <p>City: </p> <input type="text" name="City" />
+            <p>State: </p> <input type="text" name="State" />
+            <p>Zip: </p> <input type="text" name="Zip" />
+
+        </fieldset>
+
+            <fieldset>
+                <legend>Review Order</legend>
+                <br />
+                <table style="border:1px solid black;">
+                    <tbody>
+                        <tr style="border:1px solid black">
+                            <th style="padding:5px 5px 5px 5px; border: 1px solid black;" align="right">Product Name</th>
+                            <th style="padding:5px 5px 5px 5px; border: 1px solid black;" align="right">Quanity</th>
+                            <th style="padding:5px 5px 5px 5px;border: 1px solid black;" align="right">Unit Price</th>
+                            <th style="padding:5px 5px 5px 5px; border: 1px solid black;" align="right">Total Price</th>
+                        </tr>
+                        @foreach (var item in Model.Cart)
+                    {
+                            <tr>
+                                <td align="right" style="padding:5px 5px 5px 5px; border: 1px solid black;">@item.Name</td>
+                                <td align="right" style="padding:5px 5px 5px 5px; border: 1px solid black;">@item.Quantity </td>
+                                <td align="right" style="padding:5px 5px 5px 5px; border: 1px solid black;">@item.UnitPrice</td>
+                                <td align="right" style="padding:5px 5px 5px 5px; border: 1px solid black;">@((item.Quantity * item.UnitPrice).ToString("c"))</td>
+                            </tr>
+                        }
+                        <tr>
+                            <th style="padding:5px 5px 5px 5px; border: 1px solid black;" align="right" colspan="3"><span class="pull-right">Before Tax Total</span></th>
+                            <th style="padding:5px 5px 5px 5px; border: 1px solid black;" align="right">@((Model.TotalPrice).ToString("c"))</th>
+                        </tr>
+                        <tr>
+                            <th style="padding:5px 5px 5px 5px; border: 1px solid black;" align="right" colspan="3"><span class="pull-right">VAT 20%</span></th>
+                            <th style="padding:5px 5px 5px 5px; border: 1px solid black;" align="right">@((Model.TotalPrice * 0.2).ToString("c"))</th>
+                        </tr>
+                        <tr>
+                            <th style="padding:5px 5px 5px 5px; border: 1px solid black;" align="right" colspan="3"><span class="pull-right">Total</span></th>
+                            <th style="padding:5px 5px 5px 5px; border: 1px solid black;" align="right">@((((Model.TotalPrice * 0.2) + Model.TotalPrice)).ToString("c"))</th>
+                        </tr>
+                        <tr></tr>
+                    </tbody>
+                </table>
+            </fieldset>
+
+                <br />
+                <fieldset>
+                    <legend>Payment Details</legend>
+                    <br />
+                    <table>
+                        <tr>
+                            <td>
+                                CARD TYPE :
+                                <select>
+                                    <option value="visa">Visa</option>
+                                    <option value="mastercard">MasterCard</option>
+                                    <option value="paypal">PayPal</option>
+
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>CARD NUMBER </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" style="width: 100%; " />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>CARD HOLDER'S NAME </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" style="width: 100%; " />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                EXPIRY DATE
+                            </td>
+                            <td>
+                                CVV2 CODE
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input type="text" style="width: 100%; " />
+                            </td>
+                            <td>
+                                <input type="text" style="width: 100%; " />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <button type="submit" onclick="">ORDER NOW!</button>
+    }
+}
+
